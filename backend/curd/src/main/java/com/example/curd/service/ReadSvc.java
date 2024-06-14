@@ -51,6 +51,12 @@ public class ReadSvc {
                 String account_condition = json.getString("account_condition");
                 String sortBy = json.getString("sort");
 
+                // 将空字符串转换为 null
+                rider_name = (rider_name != null && rider_name.isEmpty()) ? null : rider_name;
+                phone_number = (phone_number != null && phone_number.isEmpty()) ? null : phone_number;
+                password = (password != null && password.isEmpty()) ? null : password;
+                account_condition = (account_condition != null && account_condition.isEmpty()) ? null : account_condition;
+
                 // 根据查询参数获取骑手信息
                 List<Map<String, Object>> riders = (rider_id == null && rider_name == null && phone_number == null && age == null && account_condition == null && password == null) ? readRiderDao.readAll() : readRiderDao.readByKey(rider_id, rider_name, phone_number, age, password, account_condition);
 
@@ -85,10 +91,15 @@ public class ReadSvc {
                 Integer user_id = json.getInteger("user_id");
                 String user_name = json.getString("user_name");
                 String password = json.getString("password");
-                String safe_pwd = Crypto.encode(password);
+                String safe_pwd = (password != null && !password.isEmpty()) ? Crypto.encode(password) : null;
                 String phone_number = json.getString("phone_number");
                 String authority = json.getString("authority");
                 String sortBy = json.getString("sort");
+
+                // 将空字符串转换为 null
+                user_name = (user_name != null && user_name.isEmpty()) ? null : user_name;
+                phone_number = (phone_number != null && phone_number.isEmpty()) ? null : phone_number;
+                authority = (authority != null && authority.isEmpty()) ? null : authority;
 
                 // 根据查询参数获取用户信息
                 List<Map<String, Object>> users = (user_id == null && user_name == null && phone_number == null && authority == null && password == null) ? readUserDao.readAll() : readUserDao.readByKey(user_id, user_name, safe_pwd, phone_number, authority);
@@ -129,6 +140,13 @@ public class ReadSvc {
                 String current_location = json.getString("current_location");
                 String usage_record = json.getString("usage_record");
                 String find_in = json.getString("find_in");
+
+                // 将空字符串转换为 null
+                using_condition = (using_condition != null && using_condition.isEmpty()) ? null : using_condition;
+                current_location = (current_location != null && current_location.isEmpty()) ? null : current_location;
+                usage_record = (usage_record != null && usage_record.isEmpty()) ? null : usage_record;
+                find_in = (find_in != null && find_in.isEmpty()) ? null : find_in;
+
                 String sortBy = json.getString("sort");
 
                 // 根据查询参数获取单车信息
@@ -173,7 +191,7 @@ public class ReadSvc {
                 Timestamp start_time = json.getTimestamp("start_time");
                 Timestamp end_time = json.getTimestamp("end_time");
                 String sortBy = json.getString("sort");
-                
+
                 // 根据查询参数获取记录信息
                 List<Map<String, Object>> records = (order_id == null && bike_id == null && rider_id == null && start_time == null && end_time == null) ? readRecordDao.readAll() : readRecordDao.readByKey(order_id, bike_id, rider_id, start_time, end_time);
 
@@ -211,8 +229,8 @@ public class ReadSvc {
             case "ReadArea": {
                 // 提取查询参数
                 Integer area_id = json.getInteger("area_id");
-                String sortBy = json.getString("sort");
                 Boolean showBike = json.getBoolean("show_bike");
+                String sortBy = json.getString("sort");
 
                 // 根据查询参数获取禁停区信息
                 List<Map<String, Object>> areas;
