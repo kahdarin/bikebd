@@ -4,7 +4,8 @@
 <mapper namespace="com.example.curd.dao.read.ReadBikeDao">
     <!-- 获取所有单车信息 -->
     <select id="readAll" resultType="map">
-        SELECT * FROM bike_data
+        SELECT *
+        FROM bike_data
     </select>
 
     <select id="readIdPrc" resultType="map">
@@ -41,7 +42,15 @@
             <if test="usage_record != null">
                 AND usage_record LIKE CONCAT('%', #{usage_record}, '%')
             </if>
+            <if test="production_start != null and production_end != null">
+                AND production_date BETWEEN #{production_start} AND #{production_end}
+            </if>
+            <if test="market_start != null and market_end != null">
+                AND market_date BETWEEN #{market_start} AND #{market_end}
+            </if>
+            <if test="warranty_start != null and warranty_end != null">
+                AND warranty_date BETWEEN #{warranty_start} AND #{warranty_end}
+            </if>
         </where>
     </select>
-
 </mapper>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -133,13 +134,33 @@ public class ReadSvc {
             case "ReadBike": {
                 // 提取查询参数
                 Integer bike_id = json.getInteger("bike_id");
-                Date production_date = json.getSqlDate("production_date");
-                Date market_date = json.getSqlDate("market_date");
-                Date warranty_date = json.getSqlDate("warranty_date");
+                String production_date = json.getString("production_date");
+                String market_date = json.getString("market_date");
+                String warranty_date = json.getString("warranty_date");
                 String using_condition = json.getString("using_condition");
                 String current_location = json.getString("current_location");
                 String usage_record = json.getString("usage_record");
                 String find_in = json.getString("find_in");
+                String sortBy = json.getString("sort");
+
+                // 按日期范围查询
+                String production_start = json.getString("production_start");
+                String production_end = json.getString("production_end");
+
+                production_start = (production_start != null && production_start.isEmpty()) ? null : production_start;
+                production_end = (production_end != null && production_end.isEmpty()) ? null : production_end;
+
+                String market_start = json.getString("market_start");
+                String market_end = json.getString("market_end");
+
+                market_start = (market_start != null && market_start.isEmpty()) ? null : market_start;
+                market_end = (market_end != null && market_end.isEmpty()) ? null : market_end;
+
+                String warranty_start = json.getString("warranty_start");
+                String warranty_end = json.getString("warranty_end");
+
+                warranty_start = (warranty_start != null && warranty_start.isEmpty()) ? null : warranty_start;
+                warranty_end = (warranty_end != null && warranty_end.isEmpty()) ? null : warranty_end;
 
                 // 将空字符串转换为 null
                 using_condition = (using_condition != null && using_condition.isEmpty()) ? null : using_condition;
@@ -147,10 +168,7 @@ public class ReadSvc {
                 usage_record = (usage_record != null && usage_record.isEmpty()) ? null : usage_record;
                 find_in = (find_in != null && find_in.isEmpty()) ? null : find_in;
 
-                String sortBy = json.getString("sort");
-
-                // 根据查询参数获取单车信息
-                List<Map<String, Object>> bikes = (bike_id == null && production_date == null && market_date == null && warranty_date == null && using_condition == null && current_location == null && usage_record == null && find_in == null) ? readBikeDao.readAll() : readBikeDao.readByKey(bike_id, production_date, market_date, warranty_date, using_condition, current_location, usage_record);
+                List<Map<String, Object>> bikes = (bike_id == null && production_date == null && market_date == null && warranty_date == null && using_condition == null && current_location == null && usage_record == null && find_in == null && production_start == null && market_start == null && warranty_start == null) ? readBikeDao.readAll() : readBikeDao.readByKey(bike_id, production_date, market_date, warranty_date, using_condition, current_location, usage_record, production_start, production_end, market_start, market_end, warranty_start, warranty_end);
 
                 // 如果指定了排序字段，则对单车信息进行排序
                 if (sortBy != null) {
@@ -188,8 +206,8 @@ public class ReadSvc {
                 Integer order_id = json.getInteger("order_id");
                 Integer bike_id = json.getInteger("bike_id");
                 Integer rider_id = json.getInteger("rider_id");
-                Timestamp start_time = json.getTimestamp("start_time");
-                Timestamp end_time = json.getTimestamp("end_time");
+                String start_time = json.getString("start_time");
+                String end_time = json.getString("end_time");
                 String sortBy = json.getString("sort");
 
                 // 根据查询参数获取记录信息
@@ -367,6 +385,10 @@ public class ReadSvc {
                     Comparator.comparing(record -> (Integer) record.get("bike_id"));
             case "rider" ->
                     Comparator.comparing(record -> (Integer) record.get("rider_id"));
+            case "start" ->
+                    Comparator.comparing(bike -> (LocalDateTime) bike.get("start_time"));
+            case "duration" ->
+                    Comparator.comparing(bike -> (String) bike.get("duration"));
             default -> null;
         };
     }
