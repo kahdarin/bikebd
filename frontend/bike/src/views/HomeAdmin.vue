@@ -41,9 +41,11 @@
             </el-aside>
             <!-- el-main右侧内容 -->
             <el-main>
+                console.log(currentView)
                 <account-data v-if="currentView === 'AccountData'"></account-data>
                 <search-user v-if="currentView === 'SearchUser'"></search-user>
                 <search-rider v-if="currentView === 'SearchRider'"></search-rider>
+                <search-bike v-if="currentView === 'SearchBike'"></search-bike>
             </el-main>
         </el-container>
     </el-container>
@@ -52,6 +54,7 @@
 import AccountData from '@/components/AccountData.vue'
 import SearchUser from '@/components/SearchUser.vue'
 import SearchRider from '@/components/SearchRider.vue'
+import SearchBike from '@/components/SearchBike.vue'
 export default {
     components: {
         AccountData,
@@ -118,6 +121,8 @@ export default {
                 this.currentView = 'AccountData'; // 可以根据需要调整默认组件
             } else if (authName === '骑行者管理') {
                 this.currentView = 'SearchRider'; // 可以根据需要调整默认组件
+            } else if (authName === '单车管理') {
+                this.currentView = 'SearchBike'; // 可以根据需要调整默认组件
             }
         }
     },
