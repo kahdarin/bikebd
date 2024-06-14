@@ -20,13 +20,20 @@ public interface ReadBikeDao {
 
     List<Map<String, Object>> readByKey(
             @Param("bike_id") Integer bike_id,
-            @Param("production_date") Date production_date,
-            @Param("market_date") Date market_date,
-            @Param("warranty_date") Date warranty_date,
+            @Param("production_date") String production_date,
+            @Param("market_date") String market_date,
+            @Param("warranty_date") String warranty_date,
             @Param("using_condition") String using_condition,
             @Param("current_location") String current_location,
-            @Param("usage_record") String usage_record
+            @Param("usage_record") String usage_record,
+            @Param("production_start") String production_start,
+            @Param("production_end") String production_end,
+            @Param("market_start") String market_start,
+            @Param("market_end") String market_end,
+            @Param("warranty_start") String warranty_start,
+            @Param("warranty_end") String warranty_end
     );
 
     Map<String, Object> readIdPrc(@Param("bike_id") Integer bike_id);
+
 }

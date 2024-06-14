@@ -20,7 +20,15 @@
 
     <!-- 根据关键字查询骑行记录 -->
     <select id="readByKey" resultType="map">
-        SELECT rm.*, rrt.track_processed
+        SELECT rm.order_id,
+        rm.bike_id,
+        rm.rider_id,
+        rm.start_time,
+        rm.end_time,
+        CONCAT(
+        SEC_TO_TIME(rm.duration)
+        ) AS duration,
+        rrt.track_processed
         FROM bike.riding_record_main rm
         LEFT JOIN bike.riding_record_track rrt ON rm.order_id = rrt.order_id
         <where>

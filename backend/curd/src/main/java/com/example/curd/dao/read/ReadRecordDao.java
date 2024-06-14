@@ -21,6 +21,6 @@ public interface ReadRecordDao {
             @Param("order_id") Integer order_id,
             @Param("bike_id") Integer bike_id,
             @Param("rider_id") Integer rider_id,
-            @Param("start_time") Timestamp start_time,
-            @Param("end_time") Timestamp end_time);
+            @Param("start_time") String start_time,
+            @Param("end_time") String end_time);
 }
