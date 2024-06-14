@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.read.ReadRiderDao">
+
+    <!-- 获取所有骑手信息 -->
+    <select id="readAll" resultType="map">
+        SELECT * FROM rider
+    </select>
+
+    <!-- 根据关键字查询骑手信息 -->
+    <select id="readByKey" resultType="map">
+        SELECT * FROM rider
+        <where>
+            <if test="rider_id != null">
+                AND rider_id LIKE CONCAT('%', #{rider_id}, '%')
+            </if>
+            <if test="rider_name != null">
+                AND rider_name LIKE CONCAT('%', #{rider_name}, '%')
+            </if>
+            <if test="password != null">
+                AND password = #{password}
+            </if>
+            <if test="phone_number != null">
+                AND phone_number LIKE CONCAT('%', #{phone_number}, '%')
+            </if>
+            <if test="age != null">
+                AND age = #{age}
+            </if>
+            <if test="password != null">
+                AND password LIKE CONCAT('%', #{password}, '%')
+            </if>
+            <if test="account_condition != null">
+                AND account_condition = #{account_condition}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.update.UpdateBikeDao">
+
+    <update id="update" parameterType="map">
+        UPDATE bike_data
+        SET using_condition = IF(#{using_condition} IS NOT NULL, #{using_condition}, using_condition)
+        WHERE bike_id = #{bike_id}
+    </update>
+
+</mapper>

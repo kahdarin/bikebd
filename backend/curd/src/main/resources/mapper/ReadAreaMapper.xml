@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.read.ReadAreaDao">
+
+    <!-- 查询特定禁停区的信息 -->
+    <select id="readByKey" parameterType="map" resultType="map">
+        SELECT area_id, vertex
+        FROM bike.restrict_area
+        WHERE area_id = #{area_id}
+    </select>
+
+    <select id="readAll" resultType="map">
+        SELECT area_id, vertex
+        FROM bike.restrict_area
+    </select>
+
+</mapper>

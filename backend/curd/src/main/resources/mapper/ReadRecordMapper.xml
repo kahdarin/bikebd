@@ -1,0 +1,45 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.read.ReadRecordDao">
+
+    <!-- 获取所有骑行记录 -->
+    <!-- 获取所有骑行记录 -->
+    <select id="readAll" resultType="map">
+        SELECT rm.order_id,
+               rm.bike_id,
+               rm.rider_id,
+               rm.start_time,
+               rm.end_time,
+               CONCAT(
+                       SEC_TO_TIME(rm.duration)
+               ) AS duration,
+               rrt.track_processed
+        FROM bike.riding_record_main rm
+                 LEFT JOIN bike.riding_record_track rrt ON rm.order_id = rrt.order_id
+    </select>
+
+    <!-- 根据关键字查询骑行记录 -->
+    <select id="readByKey" resultType="map">
+        SELECT rm.*, rrt.track_processed
+        FROM bike.riding_record_main rm
+        LEFT JOIN bike.riding_record_track rrt ON rm.order_id = rrt.order_id
+        <where>
+            <if test="order_id != null">
+                AND rm.order_id LIKE CONCAT('%', #{order_id}, '%')
+            </if>
+            <if test="bike_id != null">
+                AND rm.bike_id LIKE CONCAT('%', #{bike_id}, '%')
+            </if>
+            <if test="rider_id != null">
+                AND rm.rider_id LIKE CONCAT('%', #{rider_id}, '%')
+            </if>
+            <if test="start_time != null">
+                AND rm.start_time &gt;= #{start_time}
+            </if>
+            <if test="end_time != null">
+                AND rm.end_time &lt;= #{end_time}
+            </if>
+        </where>
+    </select>
+
+</mapper>

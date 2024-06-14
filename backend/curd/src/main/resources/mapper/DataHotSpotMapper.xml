@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.data.DataHotSpotDao">
+
+    <!-- 查询热点骑行区域 -->
+    <select id="getLoc" resultType="map" parameterType="map">
+        SELECT CONCAT(ROUND(start_location_x, 1), ',', ROUND(start_location_y, 1), '#', ROUND(end_location_x, 1), ',',
+        ROUND(end_location_y, 1)) as location,
+        COUNT(*) as count
+        FROM riding_record_main
+        WHERE (ROUND(start_location_x, 1) != ROUND(end_location_x, 1)) AND (ROUND(start_location_y, 1) !=
+        ROUND(end_location_y, 1))
+        <if test="month != null">
+            AND DATE_FORMAT(start_time, '%Y-%m') = #{month}
+        </if>
+        GROUP BY CONCAT(ROUND(start_location_x, 1), ',', ROUND(start_location_y, 1), '#', ROUND(end_location_x, 1), ',',
+        ROUND(end_location_y, 1))
+        ORDER BY count DESC
+    </select>
+
+    <!-- 查询热点骑行时间段（精确到10分钟） -->
+    <select id="getPeriod" resultType="map" parameterType="map">
+        SELECT CONCAT(DATE_FORMAT(start_time, '%H:'),
+        LPAD(FLOOR(MINUTE(start_time) / 10) * 10, 2, '0'),
+        '~',
+        DATE_FORMAT(start_time, '%H:'),
+        LPAD(FLOOR(MINUTE(start_time) / 10) * 10 + 10, 2, '0')) AS period,
+        COUNT(*) as count
+        FROM riding_record_main
+        <if test="month != null">
+            WHERE DATE_FORMAT(start_time, '%Y-%m') = #{month}
+        </if>
+        GROUP BY period
+        ORDER BY count DESC
+    </select>
+
+</mapper>

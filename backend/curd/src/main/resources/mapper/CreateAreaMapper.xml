@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.create.CreateAreaDao">
+
+    <insert id="create" parameterType="map">
+        INSERT INTO bike.restrict_area(area_id, vertex)
+        VALUES (#{area_id}, #{vertex})
+    </insert>
+
+</mapper>

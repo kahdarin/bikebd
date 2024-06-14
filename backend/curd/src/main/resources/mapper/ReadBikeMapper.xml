@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.read.ReadBikeDao">
+    <!-- 获取所有单车信息 -->
+    <select id="readAll" resultType="map">
+        SELECT * FROM bike_data
+    </select>
+
+    <select id="readIdPrc" resultType="map">
+        SELECT * FROM bike_data
+        <where>
+            <if test="bike_id != null">
+                AND bike_id = #{bike_id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据关键字查询单车信息 -->
+    <select id="readByKey" resultType="map" parameterType="map">
+        SELECT * FROM bike_data
+        <where>
+            <if test="bike_id != null">
+                AND bike_id LIKE CONCAT('%', #{bike_id}, '%')
+            </if>
+            <if test="production_date != null">
+                AND production_date LIKE CONCAT('%', #{production_date}, '%')
+            </if>
+            <if test="market_date != null">
+                AND market_date LIKE CONCAT('%', #{market_date}, '%')
+            </if>
+            <if test="warranty_date != null">
+                AND warranty_date LIKE CONCAT('%', #{warranty_date}, '%')
+            </if>
+            <if test="using_condition != null">
+                AND using_condition = #{using_condition}
+            </if>
+            <if test="current_location != null">
+                AND current_location LIKE CONCAT('%', #{current_location}, '%')
+            </if>
+            <if test="usage_record != null">
+                AND usage_record LIKE CONCAT('%', #{usage_record}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.create.CreateRecordDao">
+
+    <insert id="create" parameterType="map">
+        INSERT INTO bike.riding_record_main(order_id, bike_id, rider_id, start_time, start_location_x, start_location_y,
+                                            end_time, end_location_x, end_location_y, duration)
+        VALUES (#{order_id}, #{bike_id}, #{rider_id}, #{start_time}, #{start_location_x}, #{start_location_y},
+                #{end_time}, #{end_location_x}, #{end_location_y}, #{duration})
+    </insert>
+
+</mapper>

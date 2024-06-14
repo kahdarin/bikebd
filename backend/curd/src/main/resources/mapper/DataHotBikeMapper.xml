@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.data.DataHotBikeDao">
+
+    <!-- 获取使用记录最多的bike_id -->
+    <select id="getMost" resultType="map">
+        SELECT bike_id, usage_record as riders, LENGTH(usage_record) AS count
+        FROM bike_data
+        ORDER BY count DESC
+    </select>
+
+    <!-- 获取使用记录最少的bike_id -->
+    <select id="getLeast" resultType="map">
+        SELECT bike_id, usage_record as riders, LENGTH(usage_record) AS count
+        FROM bike_data
+        ORDER BY count
+    </select>
+
+</mapper>

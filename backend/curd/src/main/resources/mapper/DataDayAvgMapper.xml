@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curd.dao.data.DataDayAvgDao">
+
+    <!-- 查询并统计某一天的所有order中的duration的平均值 -->
+    <select id="getByDate" resultType="map" parameterType="map">
+        SELECT DATE(start_time) as date, AVG(duration) AS avg_duration
+        FROM riding_record_main
+        <if test="date != null">
+            WHERE DATE(start_time) = #{date}
+        </if>
+        GROUP BY DATE(start_time)
+    </select>
+
+</mapper>
