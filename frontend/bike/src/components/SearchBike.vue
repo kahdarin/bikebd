@@ -10,7 +10,7 @@
                 start-placeholder="保修时间" end-placeholder="输入日期" :shortcuts="shortcuts" />
         </div>
 
-        <div class="input-row">
+        <div class="input-row2">
             <el-button type="primary" size="middle" style="margin-right: 7px;" plain
                 @click="toggleShowForm">添加单车</el-button>
             <el-dialog v-model="showForm" title="添加单车">
@@ -311,16 +311,16 @@ export default {
     margin-bottom: 0px;
 }
 
-.input-row {
-    display: flex;
-    margin-left: -95px;
-    margin-bottom: 0px;
-}
-
 .input-row1 {
     display: flex;
     margin-bottom: 0px;
     margin-left: -200px;
+}
+
+.input-row2 {
+    display: flex;
+    margin-left: -95px;
+    margin-bottom: 0px;
 }
 
 .button-row {

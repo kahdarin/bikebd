@@ -1,49 +1,89 @@
 <template>
     <div class="input-left">
-        <el-button type="primary" size="small" style="margin-right: 15px;" plain @click="toggleShowForm">添加记录</el-button>
-        <el-dialog v-model="showForm" title="添加记录">
-            <el-form :model="newRecord" label-width="120px">
-                <el-form-item label="记录ID" required>
-                    <el-input v-model="newRecord.record_id" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="记录名称" required>
-                    <el-input v-model="newRecord.record_name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="描述" required>
-                    <el-input v-model="newRecord.description" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="日期" required>
-                    <el-date-picker v-model="newRecord.date" type="date" placeholder="选择日期"></el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="submitNewRecord">提交</el-button>
-                    <el-button @click="showForm = false">取消</el-button>
-                </el-form-item>
-            </el-form>
-        </el-dialog>
+        <div class="row1">
+            <el-date-picker v-model="filters.time_range" type="datetimerange" start-placeholder="选择开始时间"
+                end-placeholder="选择结束时间" format="YYYY-MM-DD HH:mm:ss" date-format="YYYY/MM/DD ddd" time-format="A hh:mm:ss"
+                class="input-style" />
 
-        <el-input v-model="filters.record_id" class="input-style" placeholder="记录ID" />
-        <el-input v-model="filters.record_name" class="input-style" placeholder="记录名称" />
-        <el-input v-model="filters.description" class="input-style" placeholder="描述" />
-        <el-date-picker v-model="filters.date" type="date" placeholder="选择日期" class="input-style"></el-date-picker>
-        <el-button link type="primary" icon="Search" style="margin-left: 8px;" @click="searchRecords">搜索</el-button>
-        <el-button link type="primary" style="margin-left: 5px;" @click="clearFilters">
-            <el-icon style="margin-right: 5px;">
-                <CircleClose />
-            </el-icon> 清除
-        </el-button>
+        </div>
+        <div class="row2">
+            <el-button type="primary" size="small" style="margin-right: 15px;" plain
+                @click="toggleShowForm">添加记录</el-button>
+            <el-dialog v-model="showForm" title="添加记录" style="margin-top: 90px;">
+                <el-form :model="newRecord" label-width="120px">
+                    <el-form-item  label="订单ID" required>
+                        <el-input v-model="newRecord.order_id" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="单车ID" required>
+                        <el-input v-model="newRecord.bike_id" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="骑行者ID" required>
+                        <el-input v-model="newRecord.rider_id" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="时间范围" required>
+                        <div class="block">
+                            <el-date-picker v-model="newRecord.time_range" type="datetimerange" start-placeholder="选择开始时间"
+                                end-placeholder="选择结束时间" format="YYYY-MM-DD HH:mm:ss" date-format="YYYY-MM-DD"
+                                time-format="hh-mm-ss" />
+                        </div>
+                    </el-form-item>
+                    <el-form-item label="开始位置经度" required>
+                        <el-input v-model="newRecord.start_location_x" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="开始位置纬度" required>
+                        <el-input v-model="newRecord.start_location_y" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="结束位置经度" required>
+                        <el-input v-model="newRecord.end_location_x" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="结束位置纬度" required>
+                        <el-input v-model="newRecord.end_location_y" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitNewRecord">提交</el-button>
+                        <el-button @click="showForm = false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+            <el-input v-model="filters.order_id" class="input-style" placeholder="订单ID" />
+            <el-input v-model="filters.bike_id" class="input-style" placeholder="单车ID" />
+            <el-input v-model="filters.rider_id" class="input-style" placeholder="骑行者ID" />
+            <el-button link type="primary" icon="Search" style="margin-left: 8px;" @click="searchRecords">搜索</el-button>
+            <el-button link type="primary" style="margin-left: 5px;" @click="clearFilters">
+                <el-icon style="margin-right: 5px;">
+                    <CircleClose />
+                </el-icon> 清除
+            </el-button>
+        </div>
+
+
+
+
     </div>
-    <sne-table @delete="confirmDelete" @update="handleUpdate" ref="sRef" :loading="loading" :stripe="stripe"
-        :selector="true" size="mini" row-key="record_id" height="calc(100% - 140px)" :data-source="recordData"
-        :columns="columns" @selection-change="handleSelectionChange" :show-delete="showDelete" :show-operate="showOperate">
-        <template #record_name="{ data }">
-            <span>{{ data.record_name }}</span>
+    <sne-table ref="sRef" :loading="loading" :stripe="stripe"
+        :showOperate="showOperate" :selector="true" size="mini" row-key="order_id" height="calc(100% - 140px)"
+        :data-source="recordData" :columns="columns" @selection-change="handleSelectionChange" :show-delete="showDelete"
+        :show-operate="showOperate">
+        <template #order_id="{ data }">
+            <span>{{ data.order_id }}</span>
         </template>
-        <template #description="{ data }">
-            <span>{{ data.description }}</span>
+        <template #bike_id="{ data }">
+            <span>{{ data.bike_id }}</span>
         </template>
-        <template #date="{ data }">
-            <span>{{ data.date }}</span>
+        <template #rider_id="{ data }">
+            <span>{{ data.rider_id }}</span>
+        </template>
+        <template #start_time="{ data }">
+            <span>{{ data.start_time }}</span>
+        </template>
+        <template #end_time="{ data }">
+            <span>{{ data.end_time }}</span>
+        </template>
+        <template #start_location="{ data }">
+            <span>{{ data.start_location }}</span>
+        </template>
+        <template #end_location="{ data }">
+            <span>{{ data.end_location }}</span>
         </template>
         <template #operate="{ data }">
             <el-button link type="primary" icon="Edit" @click="handleUpdate(data)">修改</el-button>
@@ -77,28 +117,40 @@ export default {
     data() {
         return {
             newRecord: {
-                record_id: '',
-                record_name: '',
-                description: '',
-                date: ''
+                order_id: '1234567',
+                bike_id: '22006',
+                rider_id: '3131',
+                start_time: '',
+                end_time: '',
+                start_location_x: '123.456',
+                start_location_y: '41.897',
+                end_location_x: '123.789',
+                end_location_y: '41.765'
             },
             showForm: false,
             loading: false,
             stripe: true,
             showDelete: true,
-            showOperate: true,
+            showOperate: false,
             recordData: [],
             filters: {
-                record_id: '',
-                record_name: '',
-                description: '',
-                date: ''
+                order_id: '',
+                bike_id: '',
+                rider_id: '',
+                start_time: '',
+                end_time: '',
+                start_location: '',
+                end_location: ''
             },
             columns: [
-                { prop: 'record_id', label: '记录ID', width: '180' },
-                { prop: 'record_name', label: '记录名称', width: '180' },
-                { prop: 'description', label: '描述', width: '180' },
-                { prop: 'date', label: '日期', width: '180' }
+                { prop: 'order_id', label: '订单ID', width: '180' },
+                { prop: 'bike_id', label: '自行车ID', width: '180' },
+                { prop: 'rider_id', label: '骑手ID', width: '180' },
+                { prop: 'start_time', label: '开始时间', width: '180' },
+                { prop: 'end_time', label: '结束时间', width: '180' },
+                { prop: 'start_location', label: '开始位置', width: '180' },
+                { prop: 'end_location', label: '结束位置', width: '180' },
+                {prop:'duration',label:'骑行时长',width:'180'}
             ]
         };
     },
@@ -113,12 +165,18 @@ export default {
         },
         submitNewRecord() {
             console.log('提交新记录:', this.newRecord);
+            console.log('time:', this.formatDate(this.newRecord.time_range[0]),this.formatDate(this.newRecord.time_range[1]));
             axios.post('/create', {
                 task: "CreateRecord",
-                record_id: this.newRecord.record_id,
-                record_name: this.newRecord.record_name,
-                description: this.newRecord.description,
-                date: this.newRecord.date
+                order_id: this.newRecord.order_id,
+                bike_id: this.newRecord.bike_id,
+                rider_id: this.newRecord.rider_id,
+                start_time: this.formatDate(this.newRecord.time_range[0]),
+                end_time: this.formatDate(this.newRecord.time_range[1]),
+                start_location_x: this.newRecord.start_location_x,
+                start_location_y: this.newRecord.start_location_y,
+                end_location_x: this.newRecord.end_location_x,
+                end_location_y: this.newRecord.end_location_y
             })
                 .then(response => {
                     console.log('Response CreateRecord:', response.msg);
@@ -153,37 +211,56 @@ export default {
                 });
         },
         searchRecords() {
-            axios.post('/read', {
-                task: "ReadRecord",
-                record_id: this.filters.record_id,
-                record_name: this.filters.record_name,
-                description: this.filters.description,
-                date: this.filters.date
-            })
-                .then(response => {
-                    console.log('search Response SearchRecord:', response.msg);
-                    if (response.type === 'Ok') {
-                        this.recordData = response.msg;
-                    } else {
-                        this.$message.error("没有符合要求的记录!")
-                    }
-                })
-                .catch(error => {
-                    console.error('搜索记录信息失败', error);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
+        console.log("enter search record", this.filters)
+        
+        // 检查 time_range 是否存在并且有值
+        const startTime = this.filters.time_range ? this.filters.time_range[0] : '';
+        const endTime = this.filters.time_range ? this.filters.time_range[1] : '';
+
+        axios.post('/read', {
+            task: "ReadRecord",
+            order_id: this.filters.order_id,
+            bike_id: this.filters.bike_id,
+            rider_id: this.filters.rider_id,
+            start_time: startTime,
+            end_time: endTime,
+        })
+        .then(response => {
+            console.log('search Response SearchRecord:', response.msg);
+            if (response.type === 'Ok') {
+                this.recordData = response.msg;
+            } else {
+                this.$message.error("没有符合要求的记录!")
+            }
+        })
+        .catch(error => {
+            console.error('搜索记录信息失败', error);
+        })
+        .finally(() => {
+            this.loading = false;
+        });
+    },
         clearFilters() {
-            this.filters.record_id = '';
-            this.filters.record_name = '';
-            this.filters.description = '';
-            this.filters.date = '';
+            this.filters.order_id = '';
+            this.filters.bike_id = '';
+            this.filters.rider_id = '';
+            this.filters.time_range = '';
+            this.filters.start_location = '';
+            this.filters.end_location = '';
         },
         handleSelectionChange(selectedItems) {
             console.log('Selected items:', selectedItems);
-        }
+        },
+        formatDate(date) {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        const hours = String(d.getHours()).padStart(2, '0');
+        const minutes = String(d.getMinutes()).padStart(2, '0');
+        const seconds = String(d.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
     }
 }
 </script>
@@ -198,6 +275,18 @@ export default {
 .input-left {
     margin-left: 163px;
     margin-right: 0px;
+    margin-bottom: 0px;
+}
+
+.row1 {
+    /* display: flex; */
+    margin-bottom: 0px;
+    margin-left: 87px;
+}
+
+.row2 {
+    display: flex;
+    margin-left: 0px;
     margin-bottom: 0px;
 }
 </style>

@@ -45,6 +45,7 @@
                 <search-user v-if="currentView === 'SearchUser'"></search-user>
                 <search-rider v-if="currentView === 'SearchRider'"></search-rider>
                 <search-bike v-if="currentView === 'SearchBike'"></search-bike>
+                <search-record v-if="currentView === 'SearchRecord'"></search-record>
             </el-main>
         </el-container>
     </el-container>

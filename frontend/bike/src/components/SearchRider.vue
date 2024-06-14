@@ -80,7 +80,7 @@ export default {
                 rider_name: '',
                 age: '',
                 phone_number: '',
-                account_condition: '',
+                // account_condition: '',
                 account_condition: '正常'
             },
             showForm: false,
