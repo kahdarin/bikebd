@@ -1,6 +1,6 @@
 <template>
     <div class="table_out">
-        <el-scrollbar max-height="560px" class="scrollbar">
+        <el-scrollbar max-height="550px" class="scrollbar">
             <el-table ref="sneTable" :data="paginatedData" :row-key="rowKey" v-loading="loading"
                 :default-expand-all="isExpandAll" :tree-props="treeProps" :border="border" :stripe="stripe" :height="height"
                 :max-height="maxHeight" size="default" @row-click="rowClick" @selection-change="selectionChange"

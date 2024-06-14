@@ -41,7 +41,6 @@
             </el-aside>
             <!-- el-main右侧内容 -->
             <el-main>
-                console.log(currentView)
                 <account-data v-if="currentView === 'AccountData'"></account-data>
                 <search-user v-if="currentView === 'SearchUser'"></search-user>
                 <search-rider v-if="currentView === 'SearchRider'"></search-rider>
@@ -81,7 +80,8 @@ export default {
                     children: [
                         { id: '21', authName: '骑行者管理', path: '/SearchUser' },
                         { id: '22', authName: '单车管理', path: '/account' },
-                        { id: '23', authName: '禁停区管理', path: '/account' }
+                        { id: '23', authName: '订单管理', path: '/account' },
+                        { id: '24', authName: '禁停区管理', path: '/account' }
                     ]
                 },
                 {
