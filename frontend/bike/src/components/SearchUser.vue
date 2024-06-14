@@ -6,10 +6,14 @@
         <el-input v-model="filters.phone_number" class="input-style" placeholder="电话号码" />
         <el-button link type="primary" icon="Search" style="margin-left: 8px;" @click="searchUsers">搜索</el-button>
         <el-button link type="primary" style="margin-left: 5px;" @click="clearFilters">
-            <el-icon style="margin-right: 5px;"><CircleClose /></el-icon> 清除
+            <el-icon style="margin-right: 5px;">
+                <CircleClose />
+            </el-icon> 清除
         </el-button>
     </div>
-    <sne-table ref="sRef" :loading="loading" :stripe="stripe" :selector="true" size="mini" row-key="user_id" height="calc(100% - 140px)" :data-source="userData" :columns="columns" @selection-change="handleSelectionChange">
+    <sne-table @delete="confirmDelete" @update="handleUpdate" ref="sRef" :loading="loading" :stripe="stripe" :selector="true" size="mini" row-key="user_id"
+        height="calc(100% - 140px)" :data-source="userData" :columns="columns"
+        @selection-change="handleSelectionChange">
         <template #user_name="{ data }">
             <span>{{ data.user_name }}</span>
         </template>
@@ -21,7 +25,12 @@
         </template>
         <template #operate="{ data }">
             <el-button link type="primary" icon="Edit" @click="handleUpdate(data)">修改</el-button>
-            <el-button link type="primary" icon="Delete" @click="handleDelete(data)">删除</el-button>
+            <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" :icon="InfoFilled" icon-color="#626AEF"
+                title="确认删除?" @confirm="() => confirmDelete(data)">
+                <template #reference>
+                    <el-button link type="primary" icon="Delete">删除</el-button>
+                </template>
+            </el-popconfirm>
         </template>
     </sne-table>
 </template>
@@ -30,6 +39,7 @@
 import axios from 'axios';
 import TableComponent from './table.vue';
 import SneTable from './table.vue';
+import { InfoFilled } from '@element-plus/icons-vue';
 export default {
     props: {
         dataSource: Array,
@@ -37,7 +47,8 @@ export default {
     },
     components: {
         TableComponent,
-        SneTable
+        SneTable,
+        InfoFilled
     },
     data() {
         return {
@@ -109,11 +120,14 @@ export default {
         handleSelectionChange(selectedItems) {
             console.log('Selected items:', selectedItems);
         },
-        handleUpdate(data) {
-            console.log('Update:', data);
+
+        confirmDelete(data) {
+            console.log("userDelete",data)
+            //this.$emit('delete', rowData);
         },
-        handleDelete(data) {
-            console.log('Delete:', data);
+
+        handleUpdate(data){
+            console.log("userUpdate",data)
         }
     }
 }
@@ -125,6 +139,7 @@ export default {
     margin-left: 0px;
     margin-right: 0px;
 }
+
 .input-left {
     margin-left: 250px;
     margin-right: 0px;

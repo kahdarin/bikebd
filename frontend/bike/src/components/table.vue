@@ -2,18 +2,18 @@
     <div class="table_out">
         <el-scrollbar max-height="550px" class="scrollbar">
             <el-table ref="sneTable" :data="paginatedData" :row-key="rowKey" v-loading="loading"
-                :default-expand-all="isExpandAll" :tree-props="treeProps" :border="border" :stripe="stripe" :height="height"
-                :max-height="maxHeight" size="default" @row-click="rowClick" @selection-change="selectionChange"
-                @sort-change="sortChange" @current-change="currentRowChange" :span-method="onSpanMethod"
-                style="width: 100%; font-size: 14px;">
-                <el-table-column v-if="selector" reserve-selection fixed="left"
-                    type="selection" header-align="center" align="center" width="50" :selectable="checkSelectTable" />
+                :default-expand-all="isExpandAll" :tree-props="treeProps" :border="border" :stripe="stripe"
+                :height="height" :max-height="maxHeight" size="default" @row-click="rowClick"
+                @selection-change="selectionChange" @sort-change="sortChange" @current-change="currentRowChange"
+                :span-method="onSpanMethod" style="width: 100%; font-size: 14px;">
+                <el-table-column v-if="selector" reserve-selection fixed="left" type="selection" header-align="center"
+                    align="center" width="50" :selectable="checkSelectTable" />
                 <el-table-column v-if="index" align="center" fixed="left" type="index" label="序号"
                     width="100"></el-table-column>
                 <template v-for="(column, i) in columns">
-                    <el-table-column v-if="isShow(column)" :prop="column.prop" :label="column.label" :width="column.width"
-                        :min-width="column.minWidth" :sortable="true" :align="column.align || 'center'"
-                        :fixed="column.fixed" :show-overflow-tooltip="showTooltip">
+                    <el-table-column v-if="isShow(column)" :prop="column.prop" :label="column.label"
+                        :width="column.width" :min-width="column.minWidth" :sortable="true"
+                        :align="column.align || 'center'" :fixed="column.fixed" :show-overflow-tooltip="showTooltip">
                         <template #default="{ row }">
                             <span v-if="!column.slotName">
                                 {{ row[column.prop] || row[column.prop] === 0 ? row[column.prop] : '' }}</span>
@@ -25,14 +25,20 @@
                 <el-table-column label="操作" align="center" width='150px'>
                     <template #default="{ row }">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(row)">修改</el-button>
-                        <el-button link type="primary" icon="Delete" @click="handleDelete(row)">删除</el-button>
+                        <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" :icon="InfoFilled"
+                            icon-color="#626AEF" title="确认删除?"
+                            @confirm="() => confirmDelete(row)">
+                            <template #reference>
+                                <el-button link type="primary" icon="Delete">删除</el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
         </el-scrollbar>
         <div class="pagination_style">
             <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
-                :page-sizes="[20,100, 200, 300, 400]" :small="small" :disabled="disabled" :background="background"
+                :page-sizes="[20, 100, 200, 300, 400]" :small="small" :disabled="disabled" :background="background"
                 layout="total, sizes, prev, pager, next, jumper" :total="dataSource.length"
                 @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </div>
@@ -42,7 +48,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { defineProps } from 'vue'
-import { Delete, Edit, Search, Share, Upload } from '@element-plus/icons-vue'
+import { Delete, Edit, Search, Share, Upload,InfoFilled } from '@element-plus/icons-vue'
+
 
 const props = defineProps({
     // 是否带边框
@@ -107,7 +114,7 @@ const handleCurrentChange = (newPage) => {
     currentPage.value = newPage
 }
 
-const emit = defineEmits()
+const emit = defineEmits(['delete', 'update'])
 
 function onSpanMethod({ rowIndex, columnIndex }) {
     // let obj = { rowspan: 1, colspan: 1 };
@@ -135,10 +142,23 @@ function selectionChange(values) {
 function checkSelectTable(row) {
     return row.selectionIsSelect !== undefined ? row.selectionIsSelect : true;
 }
+
 // // 点击某一行
 function rowClick(row) {
     // if (row) emit("row-click", row);
 }
+
+// 确认删除
+function confirmDelete(row) {
+    emit('delete',row);
+    //console.log("table_delete",row)
+}
+
+// 修改
+function handleUpdate(row) {
+    emit('update', row);
+}
+
 </script>
 
 <style scoped>
@@ -154,11 +174,13 @@ function rowClick(row) {
     align-items: center;
     height: 100%;
     margin-left: 100px;
-    overflow-x: hidden; /* 隐藏横向滚动条 */
+    overflow-x: hidden;
+    /* 隐藏横向滚动条 */
     width: 1050px;
 }
 
 .scrollbar {
-    width: 100%; /* 确保滚动条容器宽度为100% */
+    width: 100%;
+    /* 确保滚动条容器宽度为100% */
 }
 </style>
