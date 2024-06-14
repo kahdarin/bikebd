@@ -1,5 +1,34 @@
 <template>
+
     <div class="input-left">
+        <el-button type="primary" size="small" style="margin-right: 15px;" plain @click="toggleShowForm">添加用户</el-button>
+        <el-dialog v-model="showForm" title="添加用户">
+            <el-form :model="newUser" label-width="120px">
+                <el-form-item label="用户ID" required>
+                    <el-input v-model="newUser.user_id" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" required>
+                    <el-input v-model="newUser.user_name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" required>
+                    <el-input type="password" v-model="newUser.password" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="权限" required>
+                    <el-select v-model="newUser.authority" placeholder="请选择">
+                        <el-option label="管理员" value="manager"></el-option>
+                        <el-option label="员工" value="staff"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="电话号码">
+                    <el-input v-model="newUser.phone_number" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitNewUser">提交</el-button>
+                    <el-button @click="showForm = false">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
         <el-input v-model="filters.user_id" class="input-style" placeholder="用户ID" />
         <el-input v-model="filters.user_name" class="input-style" placeholder="用户名" />
         <el-input v-model="filters.authority" class="input-style" placeholder="权限" />
@@ -11,9 +40,9 @@
             </el-icon> 清除
         </el-button>
     </div>
-    <sne-table @delete="confirmDelete" @update="handleUpdate" ref="sRef" :loading="loading" :stripe="stripe" :selector="true" size="mini" row-key="user_id"
-        height="calc(100% - 140px)" :data-source="userData" :columns="columns"
-        @selection-change="handleSelectionChange">
+    <sne-table @delete="confirmDelete" @update="handleUpdate" ref="sRef" :loading="loading" :stripe="stripe"
+        :selector="true" size="mini" row-key="user_id" height="calc(100% - 140px)" :data-source="userData"
+        :columns="columns" @selection-change="handleSelectionChange" :show-delete="showDelete" :show-operate="showOperate">
         <template #user_name="{ data }">
             <span>{{ data.user_name }}</span>
         </template>
@@ -40,8 +69,11 @@ import axios from 'axios';
 import TableComponent from './table.vue';
 import SneTable from './table.vue';
 import { InfoFilled } from '@element-plus/icons-vue';
+import { ElMessageBox } from 'element-plus'
+
 export default {
     props: {
+        
         dataSource: Array,
         columns: Array
     },
@@ -52,8 +84,18 @@ export default {
     },
     data() {
         return {
+            newUser: {
+                user_id: '',
+                user_name: '',
+                password: '',
+                authority: '',
+                phone_number: ''
+            },
+            showForm :false,
             loading: false,
             stripe: true,
+            showDelete: true,
+            showOperate:true,
             userData: [],
             filters: {
                 user_id: '',
@@ -67,12 +109,46 @@ export default {
                 { prop: 'authority', label: '权限', width: '180' },
                 { prop: 'phone_number', label: '电话号码', width: '180' }
             ]
+            
         };
     },
     mounted() {
         this.fetchData();
     },
     methods: {
+        toggleShowForm() {
+            console.log('点击了添加用户按钮');
+            this.showForm = true;
+            console.log(this.showForm);
+        },
+        submitNewUser() {
+            console.log('提交新用户:', this.newUser);
+            axios.post('/create', {
+                task: "CreateUser",
+                user_id: this.newUser.user_id,
+                user_name: this.newUser.user_name,
+                password: this.newUser.password,
+                authority: this.newUser.authority,
+                phone_number: this.newUser.phone_number
+            })
+                .then(response => {
+                    console.log('Response CreateUser:', response.msg);
+                    if (response.type === 'Ok') {
+                        this.$message.success('创建成功')
+                        this.fetchData();
+                        this.showForm = false; // 关闭表单
+
+                    } else {
+                        this.$message.error(response.msg)
+                    }
+                })
+                .catch(error => {
+                    console.error('搜索用户信息失败', error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         fetchData() {
             axios.post('/read', { task: "ReadUser" })
                 .then(response => {
@@ -97,7 +173,7 @@ export default {
                 phone_number: this.filters.phone_number
             })
                 .then(response => {
-                    console.log('search Response SearchUser:', response.data);
+                    console.log('search Response SearchUser:', response.msg);
                     if (response.type === 'Ok') {
                         this.userData = response.msg;
                     } else {
@@ -122,12 +198,54 @@ export default {
         },
 
         confirmDelete(data) {
-            console.log("userDelete",data)
-            //this.$emit('delete', rowData);
+            axios.post('/delete', {
+                task: "DeleteUser",
+                user_id: data.user_id,
+            })
+                .then(response => {
+                    console.log('Response DeleteUser:', response.msg);
+                    if (response.type === 'Ok') {
+                        this.$message.success('删除成功')
+                        this.fetchData();
+                    } else {
+                        this.$message.error(response)
+                    }
+                })
+                .catch(error => {
+                    console.error('搜索用户信息失败', error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+
+            //console.log("userDelete",data)
         },
 
-        handleUpdate(data){
-            console.log("userUpdate",data)
+        handleUpdate(data) {
+            console.log("userUpdate", data)
+            axios.post('/update', {
+                task: "UpdateUser",
+                user_id: data.user_id,
+                user_name: data.user_name,
+                authority: data.authority,
+                phone_number: data.phone_number
+            })
+                .then(response => {
+                    console.log('Response UpdateUser:', response);
+                    if (response.type === 'Ok') {
+                        this.$message.success('修改成功')
+                    } else {
+                        this.$message.error(response.msg)
+                    }
+                })
+                .catch(error => {
+                    console.error('搜索用户信息失败', error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+
+            console.log("userUpdatedone", data)
         }
     }
 }
@@ -141,7 +259,7 @@ export default {
 }
 
 .input-left {
-    margin-left: 250px;
+    margin-left: 163px;
     margin-right: 0px;
     margin-bottom: 0px;
 }

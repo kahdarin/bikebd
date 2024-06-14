@@ -54,11 +54,15 @@ import AccountData from '@/components/AccountData.vue'
 import SearchUser from '@/components/SearchUser.vue'
 import SearchRider from '@/components/SearchRider.vue'
 import SearchBike from '@/components/SearchBike.vue'
+import SearchRecord from '@/components/SearchRecord.vue'
+
 export default {
     components: {
         AccountData,
         SearchUser,
-        SearchRider
+        SearchRider,
+        SearchBike,
+        SearchRecord
     },
     data() {
         return {
@@ -70,8 +74,7 @@ export default {
                     id: '1',
                     authName: '员工管理',
                     children: [
-                        { id: '11', authName: '用户概览', path: '/SearchUser' },
-                        { id: '12', authName: '权限管理', path: '/account' }
+                        { id: '11', authName: '用户概览', path: '/SearchUser' }
                     ]
                 },
                 {
@@ -123,6 +126,8 @@ export default {
                 this.currentView = 'SearchRider'; // 可以根据需要调整默认组件
             } else if (authName === '单车管理') {
                 this.currentView = 'SearchBike'; // 可以根据需要调整默认组件
+            } else if (authName === '订单管理') {
+                this.currentView = 'SearchRecord'; // 可以根据需要调整默认组件
             }
         }
     },

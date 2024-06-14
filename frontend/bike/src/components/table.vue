@@ -15,19 +15,22 @@
                         :width="column.width" :min-width="column.minWidth" :sortable="true"
                         :align="column.align || 'center'" :fixed="column.fixed" :show-overflow-tooltip="showTooltip">
                         <template #default="{ row }">
-                            <span v-if="!column.slotName">
+                            <span v-if="!column.slotName && editableRow !== row">
                                 {{ row[column.prop] || row[column.prop] === 0 ? row[column.prop] : '' }}</span>
+                            <el-input v-else-if="editableRow === row" v-model="row[column.prop]" />
                             <slot :name="column.slotName" :data="row" />
                         </template>
                     </el-table-column>
                 </template>
 
-                <el-table-column label="操作" align="center" width='150px'>
+                <el-table-column v-if="showOperate" label="操作" align="center" width='150px'>
                     <template #default="{ row }">
-                        <el-button link type="primary" icon="Edit" @click="handleUpdate(row)">修改</el-button>
-                        <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" :icon="InfoFilled"
-                            icon-color="#626AEF" title="确认删除?"
-                            @confirm="() => confirmDelete(row)">
+                        <el-button link type="primary" :icon="editableRow === row ? 'Check' : 'Edit'"
+                            @click="editableRow === row ? handleUpdate(row) : editableRow = row">
+                            {{ editableRow === row ? '保存' : '修改' }}
+                        </el-button>
+                        <el-popconfirm v-if="showDelete" confirm-button-text="Yes" cancel-button-text="No" :icon="InfoFilled"
+                            icon-color="#626AEF" title="确认删除?" @confirm="() => confirmDelete(row)">
                             <template #reference>
                                 <el-button link type="primary" icon="Delete">删除</el-button>
                             </template>
@@ -48,7 +51,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { defineProps } from 'vue'
-import { Delete, Edit, Search, Share, Upload,InfoFilled } from '@element-plus/icons-vue'
+import { Delete, Edit, Search, Share, Upload, InfoFilled } from '@element-plus/icons-vue'
 
 
 const props = defineProps({
@@ -80,6 +83,11 @@ const props = defineProps({
     isExpandAll: { type: Boolean, default: false },
     // 渲染嵌套数据的配置选项
     treeProps: { type: Object, default: () => { } },
+    // 是否显示删除按钮
+    showDelete: { type: Boolean, default: false },
+
+    showOperate: { type: Boolean, default: false },
+
 })
 
 const currentPage = ref(1)
@@ -89,6 +97,7 @@ const background = ref(false)
 const disabled = ref(false)
 const sortProp = ref(null)
 const sortOrder = ref(null)
+const editableRow = ref(null)
 
 const paginatedData = computed(() => {
     let data = [...props.dataSource]
@@ -150,13 +159,15 @@ function rowClick(row) {
 
 // 确认删除
 function confirmDelete(row) {
-    emit('delete',row);
+    emit('delete', row);
     //console.log("table_delete",row)
 }
 
 // 修改
 function handleUpdate(row) {
     emit('update', row);
+    editableRow.value = null;
+    console.log("table_update")
 }
 
 </script>
