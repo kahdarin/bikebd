@@ -7,7 +7,7 @@
 
         </div>
         <div class="row2">
-            <el-button type="primary" size="small" style="margin-right: 15px;" plain
+            <el-button v-if="showCreate" type="primary" size="small" style="margin-right: 15px;" plain
                 @click="toggleShowForm">添加记录</el-button>
             <el-dialog v-model="showForm" title="添加记录" style="margin-top: 90px;">
                 <el-form :model="newRecord" label-width="120px">
@@ -103,6 +103,7 @@ import TableComponent from './table.vue';
 import SneTable from './table.vue';
 import { InfoFilled } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus'
+import { useStore } from 'vuex'
 
 export default {
     props: {
@@ -132,6 +133,7 @@ export default {
             stripe: true,
             showDelete: true,
             showOperate: false,
+            showCreate: true,
             recordData: [],
             filters: {
                 order_id: '',
@@ -156,6 +158,12 @@ export default {
     },
     mounted() {
         this.fetchData();
+        const store = useStore();
+        const authority = store.getters.getAuthority;
+        console.log("authority", authority);
+        if (authority === 'staff') {
+            this.showCreate = false;
+        }
     },
     methods: {
         toggleShowForm() {

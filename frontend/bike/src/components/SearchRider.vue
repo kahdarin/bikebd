@@ -1,7 +1,7 @@
 <template>
     <div class="input-left">
 
-        <el-button type="primary" size="small" style="margin-right: 8px;" plain @click="toggleShowForm">添加骑行者</el-button>
+        <el-button v-if="showCreate" type="primary" size="small" style="margin-right: 8px;" plain @click="toggleShowForm">添加骑行者</el-button>
         <el-dialog v-model="showForm" title="添加骑行者">
             <el-form :model="newRider" label-width="120px">
                 <el-form-item label="骑行者ID" required>
@@ -63,6 +63,8 @@
 import axios from 'axios';
 import TableComponent from './table.vue';
 import SneTable from './table.vue';
+import { useStore } from 'vuex'
+
 export default {
     props: {
         dataSource: Array,
@@ -83,6 +85,7 @@ export default {
                 // account_condition: '',
                 account_condition: '正常'
             },
+            showCreate : true,
             showForm: false,
             loading: false,
             stripe: true,
@@ -105,6 +108,12 @@ export default {
     },
     mounted() {
         this.fetchData();
+        const store = useStore();
+        const authority = store.getters.getAuthority;
+        console.log("authority", authority);
+        if (authority === 'staff') {
+            this.showCreate = false;
+        }
     },
     methods: {
         toggleShowForm() {

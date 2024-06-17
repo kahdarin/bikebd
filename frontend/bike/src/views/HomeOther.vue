@@ -49,7 +49,6 @@
                 <forbid-area v-if="currentView === 'ForbidArea'"></forbid-area>
                 <avg-time-bike v-if="currentView === 'AvgTimeBike'"></avg-time-bike>
                 <bike-rank v-if="currentView === 'BikeRank'"></bike-rank>
-                <rider-rank v-if="currentView === 'RiderRank'"></rider-rank>
             </el-main>
         </el-container>
     </el-container>
@@ -63,7 +62,7 @@ import SearchRecord from '@/components/SearchRecord.vue'
 import ForbidArea from '@/components/ForbidArea.vue'
 import AvgTimeBike from '@/components/AvgTimeBike.vue'
 import BikeRank from '@/components/bikeRank.vue'
-import RiderRank from '@/components/riderRank.vue'
+
 export default {
     components: {
         AccountData,
@@ -73,8 +72,7 @@ export default {
         SearchRecord,
         AvgTimeBike,
         ForbidArea,
-        BikeRank,
-        RiderRank
+        BikeRank
     },
     data() {
         return {
@@ -91,29 +89,22 @@ export default {
                 },
                 {
                     id: '2',
-                    authName: '员工管理',
-                    children: [
-                        { id: '21', authName: '用户概览', path: '/SearchUser' }
-                    ]
-                },
-                {
-                    id: '3',
                     authName: '数据管理',
                     children: [
-                        { id: '31', authName: '骑行者管理', path: '/SearchUser' },
-                        { id: '32', authName: '单车管理', path: '/account' },
-                        { id: '33', authName: '订单管理', path: '/account' },
-                        { id: '34', authName: '禁停区管理', path: '/ForbidArea' }
+                        { id: '21', authName: '骑行者管理', path: '/SearchUser' },
+                        { id: '22', authName: '单车管理', path: '/account' },
+                        { id: '23', authName: '订单管理', path: '/account' },
+                        { id: '24', authName: '禁停区管理', path: '/ForbidArea' }
                     ]
                 },
 
                 {
-                    id: '4',
+                    id: '3',
                     authName: '数据统计',
                     children: [
-                        { id: '41', authName: '平均骑行时间', path: '/account' },
-                        { id: '42', authName: '车辆排行', path: '/account' },
-                        // { id: '43', authName: '骑行者排行', path: '/account' }
+                        { id: '31', authName: '平均骑行时间', path: '/account' },
+                        { id: '32', authName: '车辆排行', path: '/account' },
+                        { id: '33', authName: '骑行者排行', path: '/account' }
                     ]
                 }
             ],
@@ -149,8 +140,6 @@ export default {
                 this.currentView = 'AvgTimeBike'; // 可以根据需要调整默认组件
             } else if (authName === '车辆排行') {
                 this.currentView = 'BikeRank'; // 可以根据需要调整默认组件
-            }else if(authName === '骑行者排行'){
-                this.currentView = 'RiderRank'; // 可以根据需要调整默认组件
             }
         }
     },

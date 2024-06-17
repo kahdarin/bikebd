@@ -70,6 +70,7 @@ import TableComponent from './table.vue';
 import SneTable from './table.vue';
 import { InfoFilled } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus'
+import { useStore } from 'vuex'
 
 export default {
     props: {

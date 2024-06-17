@@ -35,7 +35,8 @@
                                 <el-button link type="primary" icon="Delete">删除</el-button>
                             </template>
                         </el-popconfirm>
-                        <el-button v-if="showMap" link type="primary" icon="MapLocation" @click="showMap(row)">地图</el-button>
+                        
+                        <el-button v-if="showMapBike" link type="primary" icon="MapLocation" @click="showMap(row)">地图</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -88,7 +89,7 @@ const props = defineProps({
     showDelete: { type: Boolean, default: false },
     //是否显示地图
 
-    showMap: { type: Boolean, default: false },
+    showMapBike: { type: Boolean, default: false },
 
     showOperate: { type: Boolean, default: false },
 

@@ -34,9 +34,10 @@ export default {
 
     const login = async () => {
       try {
+        console.log(loginUser.username, loginUser.password)
         const response = await axios.post('/read', {
           task : 'ReadUser',
-          username: loginUser.username,
+          user_name: loginUser.username,
           password: loginUser.password
         }, {
           headers: {
@@ -46,9 +47,11 @@ export default {
         console.log(response)
         if (response.type === 'Ok') {
           const userId = response.msg[0].user_id;
-
+          console.log("userId", userId);
           store.dispatch('updateUserId', userId);
           const authority = response.msg[0].authority
+          store.dispatch('updateAuthority', authority);
+          console.log("authority login", authority);
           console.log(authority)
           if (authority === 'admin'){
             console.log('login_yes')

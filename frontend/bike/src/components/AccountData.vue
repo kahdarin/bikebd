@@ -12,6 +12,9 @@
               <el-form-item label="用户名" prop="username">
                 <el-input v-model="formData.username"></el-input>
               </el-form-item>
+              <el-form-item label="权限" prop="authority" >
+                <el-input v-model="formData.authority" disabled></el-input>
+              </el-form-item>
               <!-- <el-form-item label="邮箱" prop="email">
                   <el-input v-model="formData.email"></el-input>
                 </el-form-item> -->
@@ -22,13 +25,6 @@
                 <el-button type="primary" @click="submitForm('form')">保存</el-button>
               </el-form-item>
             </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="视频云盘">
-            <el-table :data="videoList" style="width: 100%">
-              <el-table-column prop="name" label="视频名称"></el-table-column>
-              <el-table-column prop="size" label="视频大小"></el-table-column>
-              <el-table-column prop="date" label="上传日期"></el-table-column>
-            </el-table>
           </el-tab-pane>
           <el-tab-pane label="更改密码">
             <el-form :model="passwordForm" :rules="passwordRules" ref="passwordForm" label-width="100px">
@@ -64,10 +60,12 @@ export default {
   data() {
     return {
       userId: null,
+      authority: null,
       activeTab: '0',
       formData: {
         username: '',
-        phone: ''
+        phone: '',
+        authority: ''
       },
       rules: {
         //   email: [
@@ -97,11 +95,7 @@ export default {
           { validator: this.validateConfirmPassword, trigger: 'blur' }
         ]
       },
-      videoList: [
-        { name: '视频1', size: '100MB', date: '2021-10-01' },
-        { name: '视频2', size: '200MB', date: '2021-10-02' },
-        { name: '视频3', size: '300MB', date: '2021-10-03' }
-      ],
+
       //avatar: 'https://avatars.githubusercontent.com/u/125264?s=200&v=4',
       avatar: avatar_url,
       name: 'admin'
@@ -192,6 +186,9 @@ export default {
   mounted() {
     const store = useStore();
     const userId = store.getters.getUserId;
+    const authority = store.getters.getAuthority;
+    
+    this.formData.authority = authority;
     this.userId = userId;
     console.log("account_data")
     console.log("userid = ", userId)

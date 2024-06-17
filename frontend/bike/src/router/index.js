@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
-import Home from '@/views/Home.vue'
 import HomeAdmin from '@/views/HomeAdmin.vue'
 import Account from '@/components/AccountData.vue'
 import SearchUser from '@/components/SearchUser.vue'
 import ForbidArea from '@/components/ForbidArea.vue'
+import HomeOther from '@/views/HomeOther.vue'
 const routes = [
   {
     path: '/',
@@ -18,8 +18,8 @@ const routes = [
   },
   {
     path: '/Home',
-    name: 'Home',
-    component: Home
+    name: 'HomeOther',
+    component: HomeOther
   },
   {
     path: '/HomeAdmin',
