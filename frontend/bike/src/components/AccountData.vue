@@ -185,9 +185,9 @@ export default {
   },
   mounted() {
     const store = useStore();
-    const userId = store.getters.getUserId;
-    const authority = store.getters.getAuthority;
-    
+    const userId = localStorage.getItem('userId');
+const authority = localStorage.getItem('authority');
+    console.log("account_data authority userid:", userId);
     this.formData.authority = authority;
     this.userId = userId;
     console.log("account_data")

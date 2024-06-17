@@ -21,12 +21,12 @@ import axios from '@/api/request'
 import { useStore } from 'vuex'
 
 export default {
-  
+
   name: 'Login',
   setup() {
     const store = useStore();
     const router = useRouter()
-    
+
     const loginUser = reactive({
       username: '',
       password: ''
@@ -36,7 +36,7 @@ export default {
       try {
         console.log(loginUser.username, loginUser.password)
         const response = await axios.post('/read', {
-          task : 'ReadUser',
+          task: 'ReadUser',
           user_name: loginUser.username,
           password: loginUser.password
         }, {
@@ -47,17 +47,23 @@ export default {
         console.log(response)
         if (response.type === 'Ok') {
           const userId = response.msg[0].user_id;
+          const authority = response.msg[0].authority;
+
           console.log("userId", userId);
-          store.dispatch('updateUserId', userId);
-          const authority = response.msg[0].authority
-          store.dispatch('updateAuthority', authority);
           console.log("authority login", authority);
-          console.log(authority)
-          if (authority === 'admin'){
+
+          // 使用 localStorage 存储 userId 和 authority
+          localStorage.setItem('userId', userId);
+          localStorage.setItem('authority', authority);
+
+          // 更新 Vuex store（如果仍然需要在其他组件中使用）
+          store.dispatch('updateUserId', userId);
+          store.dispatch('updateAuthority', authority);
+
+          if (authority === 'admin') {
             console.log('login_yes')
             router.push('/HomeAdmin')
-          }
-          else{
+          } else {
             router.push('/Home')
           }
         } else if (response.data.type === 'Err') {
