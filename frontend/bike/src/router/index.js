@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue'
 import HomeAdmin from '@/views/HomeAdmin.vue'
 import Account from '@/components/AccountData.vue'
 import SearchUser from '@/components/SearchUser.vue'
+import ForbidArea from '@/components/ForbidArea.vue'
 const routes = [
   {
     path: '/',
@@ -35,7 +36,11 @@ const routes = [
     name: 'SearchUser',
     component: SearchUser
   },
-
+{
+  path: '/ForbidArea',
+  name: 'ForbidArea',
+  component: ForbidArea
+}
 ]
 
 const router = createRouter({

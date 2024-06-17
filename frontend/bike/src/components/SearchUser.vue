@@ -192,6 +192,7 @@ export default {
             this.filters.user_name = '';
             this.filters.authority = '';
             this.filters.phone_number = '';
+            this.fetchData();
         },
         handleSelectionChange(selectedItems) {
             console.log('Selected items:', selectedItems);

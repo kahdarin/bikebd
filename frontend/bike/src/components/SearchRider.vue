@@ -184,6 +184,7 @@ export default {
             this.filters.age = '';
             this.filters.phone_number = '';
             this.filters.account_condition = '';
+            this.fetchData();
         },
         handleSelectionChange(selectedItems) {
             console.log('Selected items:', selectedItems);

@@ -46,6 +46,7 @@
                 <search-rider v-if="currentView === 'SearchRider'"></search-rider>
                 <search-bike v-if="currentView === 'SearchBike'"></search-bike>
                 <search-record v-if="currentView === 'SearchRecord'"></search-record>
+                <forbid-area v-if="currentView === 'ForbidArea'"></forbid-area>
             </el-main>
         </el-container>
     </el-container>
@@ -56,6 +57,7 @@ import SearchUser from '@/components/SearchUser.vue'
 import SearchRider from '@/components/SearchRider.vue'
 import SearchBike from '@/components/SearchBike.vue'
 import SearchRecord from '@/components/SearchRecord.vue'
+import ForbidArea from '@/components/ForbidArea.vue'
 
 export default {
     components: {
@@ -63,7 +65,8 @@ export default {
         SearchUser,
         SearchRider,
         SearchBike,
-        SearchRecord
+        SearchRecord,
+        ForbidArea
     },
     data() {
         return {
@@ -85,7 +88,7 @@ export default {
                         { id: '21', authName: '骑行者管理', path: '/SearchUser' },
                         { id: '22', authName: '单车管理', path: '/account' },
                         { id: '23', authName: '订单管理', path: '/account' },
-                        { id: '24', authName: '禁停区管理', path: '/account' }
+                        { id: '24', authName: '禁停区管理', path: '/ForbidArea' }
                     ]
                 },
                 {
@@ -129,6 +132,8 @@ export default {
                 this.currentView = 'SearchBike'; // 可以根据需要调整默认组件
             } else if (authName === '订单管理') {
                 this.currentView = 'SearchRecord'; // 可以根据需要调整默认组件
+            } else if (authName === '禁停区管理') {
+                this.currentView = 'ForbidArea'; // 可以根据需要调整默认组件
             }
         }
     },

@@ -247,6 +247,7 @@ export default {
             this.filters.time_range = '';
             this.filters.start_location = '';
             this.filters.end_location = '';
+            this.fetchData();
         },
         handleSelectionChange(selectedItems) {
             console.log('Selected items:', selectedItems);
