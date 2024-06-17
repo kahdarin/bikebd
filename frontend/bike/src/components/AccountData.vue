@@ -128,9 +128,9 @@ export default {
       })
     },
     submitForm_password(formName) {
-      const old_password = this.formData.oldPassword;
-      const new_password = this.formData.newPassword;
-      //console.log("account 114:", user_name, phone_number)
+      const old_password = this.passwordForm.oldPassword;
+  const new_password = this.passwordForm.newPassword; 
+      console.log("account 133:", new_password)
       this.$refs[formName].validate(valid => {
         if (valid) {
           //console.log("account 117:", this.userId)

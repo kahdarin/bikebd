@@ -134,7 +134,7 @@ export default {
             stripe: true,
             bikeData: [],
             showMapBike: false,
-            showDelete: true,
+            showDelete: false,
             showOperate: true,
             showMapIcon: false,
             showCreate: true,
