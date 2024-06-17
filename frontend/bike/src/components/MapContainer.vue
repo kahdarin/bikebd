@@ -15,7 +15,7 @@ onMounted(() => {
   AMapLoader.load({
     key: "bc6f24d83744f335f42197e23a32c04a", // 申请好的Web端开发者Key，首次调用 load 时必填
     version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-    plugins: ["AMap.Scale","PolylineEditor","PolygonEditor","RectangleEditor","MouseTool","Scale"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
+    plugins: ["AMap.Scale", "PolylineEditor", "PolygonEditor", "RectangleEditor", "MouseTool", "Scale","AMap.PolygonEditor"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
   })
     .then((AMap) => {
       map = new AMap.Map("container", {

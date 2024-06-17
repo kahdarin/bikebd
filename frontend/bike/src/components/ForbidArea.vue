@@ -1,7 +1,10 @@
 <template>
     <div class="input-left">
         <el-button type="primary" size="small" style="margin-right: 15px;" plain @click="toggleShowForm">添加禁停区</el-button>
-        <el-dialog v-model="showForm" title="添加禁停区">
+        <el-dialog v-model="showForm" @opened="initMapCreate" @closed="destroyMap">
+            <template #header>
+                <span>添加禁停区</span>
+            </template>
             <el-form :model="newArea" label-width="120px">
                 <el-form-item label="禁停区ID">
                     <el-input v-model="newArea.area_id" autocomplete="off"></el-input>
@@ -9,6 +12,7 @@
                 <el-form-item label="顶点坐标" required>
                     <el-input v-model="newArea.vertexs" autocomplete="off"></el-input>
                 </el-form-item>
+                <div id="createContainer" style="width: 100%; height: 300px;"></div>
                 <el-form-item>
                     <el-button type="primary" @click="submitNewArea">提交</el-button>
                     <el-button @click="showForm = false">取消</el-button>
@@ -47,14 +51,14 @@
         </template>
     </sne-table>
 
-    <el-dialog v-model="mapVisible" width="60%" @opened="initMap" top="10vh">
-        <template #title>
+    <el-dialog v-model="mapVisible" width="60%" @opened="initMapRead" @closed="destroyMap" top="10vh">
+        <template #header>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <el-button type="primary" @click="toggleBikeVisibility">显示单车</el-button>
             </div>
         </template>
 
-        <div id="container" style="width: 100%; height: 600px;"></div>
+        <div id="readContainer" style="width: 100%; height: 600px;"></div>
     </el-dialog>
 </template>
 
@@ -112,13 +116,15 @@ export default {
             });
             map.add(polygon);
         },
-        initMap() {
-            //console.log("initMap")
+        initMapRead() {
+            console.log("initMap1")
             AMapLoader.load({
+
                 key: "bc6f24d83744f335f42197e23a32c04a", //申请好的Web端开发者key，调用 load 时必填
                 version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
             })
                 .then((AMap) => {
+                    console.log("initMap2")
                     //JS API 加载完成后获取AMap对象
                     const layer = new AMap.createDefaultLayer({
                         zooms: [3, 20], //可见级别
@@ -127,7 +133,7 @@ export default {
                         zIndex: 0, //叠加层级
                     });
 
-                    const map = new AMap.Map("container", {
+                    const map = new AMap.Map("readContainer", {
                         viewMode: "2D", //默认使用 2D 模式
                         zoom: 11.5, //地图级别
                         center: [121.5, 31.23], //地图中心点
@@ -135,6 +141,43 @@ export default {
                     });
                     this.map = map;
                     this.addPolygon(map, this.vertices);
+                    //异步加载控件
+                    AMap.plugin("AMap.ToolBar", function () {
+                        var toolbar = new AMap.ToolBar(); //缩放工具条实例化
+                        map.addControl(toolbar);
+                    });
+                    console.log("initMap3")
+                })
+                .catch((e) => {
+                    console.error(e); //加载错误提示
+                });
+
+        },
+        initMapCreate() {
+            //console.log("initMap1")
+            AMapLoader.load({
+
+                key: "bc6f24d83744f335f42197e23a32c04a", //申请好的Web端开发者key，调用 load 时必填
+                version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
+            })
+                .then((AMap) => {
+                    this.Amap = AMap;
+                    //console.log("initMap2")
+                    //JS API 加载完成后获取AMap对象
+                    const layer = new AMap.createDefaultLayer({
+                        zooms: [3, 20], //可见级别
+                        visible: true, //是否可见
+                        opacity: 1, //透明度
+                        zIndex: 0, //叠加层级
+                    });
+
+                    const map = new AMap.Map("createContainer", {
+                        viewMode: "2D", //默认使用 2D 模式
+                        zoom: 11.5, //地图级别
+                        center: [121.5, 31.23], //地图中心点
+                        layers: [layer], //layer为创建的默认图层
+                    });
+                    this.map = map;
                     //异步加载控件
                     AMap.plugin("AMap.ToolBar", function () {
                         var toolbar = new AMap.ToolBar(); //缩放工具条实例化
@@ -154,6 +197,12 @@ export default {
                 const [lng, lat] = point.split(',');
                 return [parseFloat(lng), parseFloat(lat)];
             });
+        },
+        destroyMap() {
+            if (this.map) {
+                this.map.destroy();
+                this.map = '';
+            }
         },
         toggleBikeVisibility() {
             axios.post('/read', {
